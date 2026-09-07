@@ -26,8 +26,8 @@ describe('TechStrip', () => {
 
 describe('Button', () => {
   it('renders children and primary styling', () => {
-    render(<Button>Get Early Access</Button>);
-    expect(screen.getByRole('button', { name: /get early access/i })).toBeInTheDocument();
+    render(<Button>Get Started</Button>);
+    expect(screen.getByRole('button', { name: /get started/i })).toBeInTheDocument();
   });
 
   it('respects disabled state', () => {

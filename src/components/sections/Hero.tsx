@@ -53,8 +53,8 @@ export function Hero() {
           </p>
 
           <div className="mt-8 flex flex-wrap items-center gap-4">
-            <LinkButton href="#get-started" size="lg">
-              Get Early Access
+            <LinkButton href="https://agentforge-main.vercel.app/login" size="lg">
+              Get Started
             </LinkButton>
             <LinkButton href="#demo" variant="demo" size="lg" icon={DemoIcon}>
               Watch Demo

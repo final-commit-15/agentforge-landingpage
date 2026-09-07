@@ -37,8 +37,8 @@ export function Navigation() {
         </nav>
 
         <div className="hidden md:block">
-          <LinkButton href="#get-started" size="sm">
-            Get Early Access
+          <LinkButton href="https://agentforge-main.vercel.app/login" size="sm">
+            Get Started
           </LinkButton>
         </div>
 
@@ -74,8 +74,8 @@ export function Navigation() {
             ))}
           </ul>
           <div className="mt-4">
-            <LinkButton href="#get-started" className="w-full" onClick={() => setOpen(false)}>
-              Get Early Access
+            <LinkButton href="https://agentforge-main.vercel.app/login" className="w-full" onClick={() => setOpen(false)}>
+              Get Started
             </LinkButton>
           </div>
         </nav>
