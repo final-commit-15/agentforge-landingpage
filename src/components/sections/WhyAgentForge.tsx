@@ -28,19 +28,19 @@ export function WhyAgentForge() {
   const reduce = useReducedMotion();
 
   return (
-    <Section id="why" ariaLabelledBy="why-heading" className="bg-white py-24">
+    <Section id="why" ariaLabelledBy="why-heading" className="py-24">
       <Container>
         <div className="mx-auto max-w-2xl text-center">
-          <h2 id="why-heading" className="text-3xl font-bold tracking-tight text-ink sm:text-4xl">
+          <h2 id="why-heading" className="text-3xl font-bold tracking-tight text-text-primary sm:text-4xl font-heading">
             Stop doing these tasks manually
           </h2>
-          <p className="mt-4 text-lg text-ink/60">
+          <p className="mt-4 text-lg text-text-muted">
             The weekly project busywork that quietly eats your team&apos;s focus.
           </p>
         </div>
 
         <motion.div
-          className="mx-auto mt-14 max-w-3xl overflow-hidden rounded-24 border border-ink/5 bg-surface shadow-soft"
+          className="card-warm relative mx-auto mt-14 max-w-3xl overflow-hidden rounded-2xl glass shadow-card"
           {...(reduce
             ? {}
             : {
@@ -52,14 +52,14 @@ export function WhyAgentForge() {
         >
           <table className="w-full text-left" aria-label="Manual project management versus AgentForge automation">
             <thead>
-              <tr className="border-b border-ink/10 bg-white">
-                <th scope="col" className="px-6 py-4 text-sm font-semibold text-ink">
+              <tr className="border-b border-border-primary bg-bg-secondary/50">
+                <th scope="col" className="px-6 py-4 text-sm font-semibold text-text-primary">
                   Task
                 </th>
-                <th scope="col" className="px-6 py-4 text-left text-sm font-semibold text-ink/60">
+                <th scope="col" className="px-6 py-4 text-left text-sm font-semibold text-text-muted">
                   Manually
                 </th>
-                <th scope="col" className="px-6 py-4 text-left text-sm font-semibold text-primary">
+                <th scope="col" className="px-6 py-4 text-left text-sm font-semibold text-brand-primary">
                   With AgentForge
                 </th>
               </tr>
@@ -68,20 +68,20 @@ export function WhyAgentForge() {
               {comparisons.map((row, index) => (
                 <tr
                   key={row.feature}
-                  className={`${index !== comparisons.length - 1 ? 'border-b border-ink/5' : ''} ${index % 2 === 1 ? 'bg-white/60' : ''}`}
+                  className={`${index !== comparisons.length - 1 ? 'border-b border-border-primary/50' : ''} ${index % 2 === 1 ? 'bg-bg-secondary/50' : ''}`}
                 >
-                  <th scope="row" className="px-6 py-4 text-sm font-medium text-ink">
+                  <th scope="row" className="px-6 py-4 text-sm font-medium text-text-primary">
                     {row.feature}
                   </th>
                   <td className="px-6 py-4">
-                    <div className="flex items-center gap-2 text-sm text-ink/50">
-                      <X className="h-4 w-4 shrink-0 text-ink/25" aria-hidden="true" />
+                    <div className="flex items-center gap-2 text-sm text-text-muted">
+                      <X className="h-4 w-4 shrink-0 text-text-muted/50" aria-hidden="true" />
                       <span>{row.manual}</span>
                     </div>
                   </td>
                   <td className="px-6 py-4">
-                    <div className="flex items-center gap-2 text-sm font-medium text-primary">
-                      <Check className="h-4 w-4 shrink-0 text-emerald-500" aria-hidden="true" />
+                    <div className="flex items-center gap-2 text-sm font-medium text-brand-primary">
+                      <Check className="h-4 w-4 shrink-0 text-emerald-400" aria-hidden="true" />
                       <span>{row.automated}</span>
                     </div>
                   </td>

@@ -33,10 +33,10 @@ export function FAQ() {
   const reduce = useReducedMotion();
 
   return (
-    <Section id="faq" ariaLabelledBy="faq-heading" className="bg-surface py-24">
+    <Section id="faq" ariaLabelledBy="faq-heading" className="py-24">
       <Container>
         <div className="mx-auto max-w-2xl text-center">
-          <h2 id="faq-heading" className="text-3xl font-bold tracking-tight text-ink sm:text-4xl">
+          <h2 id="faq-heading" className="text-3xl font-bold tracking-tight text-text-primary sm:text-4xl font-heading">
             Frequently asked questions
           </h2>
         </div>
@@ -45,20 +45,20 @@ export function FAQ() {
           {faqs.map((faq, index) => {
             const isOpen = open === index;
             return (
-              <div key={faq.question} className="overflow-hidden rounded-16 border border-ink/5 bg-white shadow-soft">
+              <div key={faq.question} className="card-warm overflow-hidden glass rounded-xl">
                 <button
                   type="button"
-                  className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                  className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary"
                   onClick={() => setOpen(isOpen ? null : index)}
                   aria-expanded={isOpen}
                   aria-controls={`faq-answer-${index}`}
                   id={`faq-question-${index}`}
                 >
-                  <span className="text-base font-semibold text-ink">{faq.question}</span>
+                  <span className="text-base font-semibold text-text-primary">{faq.question}</span>
                   <motion.span
                     animate={{ rotate: isOpen ? 180 : 0 }}
                     transition={{ duration: 0.2 }}
-                    className="shrink-0 text-ink/40"
+                    className="shrink-0 text-text-muted"
                     aria-hidden="true"
                   >
                     <ChevronDown className="h-5 w-5" />
@@ -76,7 +76,7 @@ export function FAQ() {
                       transition={{ duration: 0.25, ease: 'easeOut' }}
                       className="overflow-hidden"
                     >
-                      <p className="px-5 pb-5 text-sm leading-relaxed text-ink/60">{faq.answer}</p>
+                      <p className="px-5 pb-5 text-sm leading-relaxed text-text-muted">{faq.answer}</p>
                     </motion.div>
                   )}
                 </AnimatePresence>

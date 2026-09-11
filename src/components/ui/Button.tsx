@@ -28,13 +28,15 @@ interface LinkButtonProps extends CommonProps {
 }
 
 const base =
-  'inline-flex items-center justify-center rounded-16 font-semibold transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap';
+  'inline-flex items-center justify-center rounded-16 font-semibold transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg-primary disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap';
 
 const variants: Record<Variant, string> = {
-  primary: 'bg-primary text-white hover:bg-blue-700 shadow-cta',
-  secondary: 'bg-white text-ink border border-ink/10 hover:border-ink/20 hover:shadow-soft',
-  ghost: 'bg-transparent text-primary hover:bg-blue-50',
-  demo: 'bg-transparent text-primary hover:text-blue-700',
+  primary:
+    'bg-brand-primary text-white hover:brightness-110 shadow-cta hover:shadow-warm',
+  secondary:
+    'bg-bg-secondary text-text-primary border border-border-primary hover:border-amber-400/40 hover:shadow-warm',
+  ghost: 'bg-transparent text-brand-primary hover:bg-brand-primary/10',
+  demo: 'bg-transparent text-text-secondary border border-border-primary hover:border-amber-400/40 hover:text-text-primary hover:bg-amber-400/5',
 };
 
 const sizes: Record<Size, string> = {

@@ -3,6 +3,8 @@ import { TechStrip } from '@/components/sections/TechStrip';
 import { Footer } from '@/components/sections/Footer';
 import { Button } from '@/components/ui/Button';
 import { StartupTeams } from '@/components/sections/StartupTeams';
+import { Hero } from '@/components/sections/Hero';
+import { CursorGlow } from '@/components/ui/CursorGlow';
 
 describe('TechStrip', () => {
   it('renders the integration tools', () => {
@@ -59,5 +61,35 @@ describe('StartupTeams', () => {
     expect(screen.getByText('Project Managers')).toBeInTheDocument();
     expect(screen.getByText('Developers')).toBeInTheDocument();
     expect(screen.getByText('Remote Teams')).toBeInTheDocument();
+  });
+});
+
+describe('Hero orbit badges', () => {
+  it('renders all five integration cards with category and connected state', () => {
+    render(<Hero />);
+    expect(screen.getByLabelText(/slack integration.*connected/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/jira integration.*connected/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/github integration.*connected/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/calendar integration.*connected/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/notion integration.*connected/i)).toBeInTheDocument();
+  });
+
+  it('renders the robot video without a surrounding box', () => {
+    render(<Hero />);
+    const video = screen.getByLabelText(/agentforge ai robot/i);
+    expect(video.tagName).toBe('VIDEO');
+    // No ancestors may carry the old boxed-frame styling
+    let el = video.parentElement;
+    while (el) {
+      expect(el.className).not.toMatch(/robo-frame/);
+      el = el.parentElement;
+    }
+  });
+});
+
+describe('CursorGlow', () => {
+  it('renders the night-mode cursor aura in dark mode', () => {
+    render(<CursorGlow />);
+    expect(screen.getByTestId('cursor-glow')).toBeInTheDocument();
   });
 });

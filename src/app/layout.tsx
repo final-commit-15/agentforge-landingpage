@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
+import { CursorGlow } from '@/components/ui/CursorGlow';
 
 export const metadata: Metadata = {
   title: 'AgentForge — Your AI Project Manager for Startup Teams',
@@ -54,13 +55,21 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   };
 
   return (
-    <html lang="en" className="scroll-smooth">
+    <html lang="en" className="scroll-smooth dark">
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem('theme');if(!t){t='dark';}var r=document.documentElement;r.classList.remove('light','dark');r.classList.add(t==='light'?'light':'dark');r.style.colorScheme=t==='light'?'light':'dark';}catch(e){document.documentElement.classList.add('dark');}})();`,
+          }}
+        />
       </head>
-      <body className="antialiased">{children}</body>
+      <body className="antialiased">
+        <CursorGlow />
+        {children}
+      </body>
     </html>
   );
 }

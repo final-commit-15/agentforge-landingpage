@@ -3,9 +3,75 @@
 @tailwind utilities;
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Fustat:wght@400;500;600;700&display=swap');
 
 :root {
   --font-inter: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-outfit: 'Outfit', ui-sans-serif, system-ui, sans-serif;
+  --font-fustat: 'Fustat', ui-sans-serif, system-ui, sans-serif;
+  color-scheme: dark;
+}
+
+/* Dark theme (default) — :root, .dark, and no .light all mean dark */
+:root,
+:root.dark,
+.dark {
+  --bg-primary: #050508;
+  --bg-secondary: #0a0a0f;
+  --bg-tertiary: #111118;
+  --text-primary: #fefefe;
+  --text-secondary: #e4e4e7;
+  --text-muted: #8b8b96;
+  --text-body: #a1a1aa;
+  --border-primary: #1e1e2a;
+  --border-secondary: #2a2a38;
+  --brand-primary: #6366f1;
+  --brand-primary-hover: #4f46e5;
+  --brand-primary-dark: #4338ca;
+  --brand-secondary: #06b6d4;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --error: #ef4444;
+  --info: #3b82f6;
+
+  /* Warm-white glow — stronger on dark for contrast */
+  --glow-warm: rgba(255, 245, 230, 0.16);
+  --glow-warm-strong: rgba(255, 245, 230, 0.32);
+  --glow-warm-soft: rgba(255, 237, 213, 0.1);
+  --glow-amber: rgba(245, 158, 11, 0.16);
+  --glow-blue: rgba(99, 102, 241, 0.2);
+  --glow-green: rgba(16, 185, 129, 0.15);
+  color-scheme: dark;
+}
+
+:root.light,
+.light {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8fafc;
+  --bg-tertiary: #f1f5f9;
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
+  --text-body: #475569;
+  --border-primary: #e2e8f0;
+  --border-secondary: #cbd5e1;
+  --brand-primary: #4f46e5;
+  --brand-primary-hover: #4338ca;
+  --brand-primary-dark: #3730a3;
+  --brand-secondary: #0891b2;
+  --success: #059669;
+  --warning: #d97706;
+  --error: #dc2626;
+  --info: #2563eb;
+
+  /* Warm-white glow — softer but still visible on light */
+  --glow-warm: rgba(180, 120, 40, 0.14);
+  --glow-warm-strong: rgba(180, 120, 40, 0.24);
+  --glow-warm-soft: rgba(255, 237, 213, 0.55);
+  --glow-amber: rgba(217, 119, 6, 0.14);
+  --glow-blue: rgba(79, 70, 229, 0.12);
+  --glow-green: rgba(5, 150, 105, 0.12);
+  color-scheme: light;
 }
 
 * {
@@ -19,13 +85,39 @@ html {
 }
 
 body {
-  color: #111827;
-  background: #f8fafc;
+  color: var(--text-body);
+  background: var(--bg-primary);
   font-family: var(--font-inter);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* Theme switch glides in ~450ms (P7) */
+  transition: background-color 0.45s ease, color 0.45s ease;
 }
 
+/* Selection */
+::selection {
+  background-color: var(--brand-primary);
+  color: white;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--text-muted);
+  border-radius: 4px;
+  opacity: 0.3;
+}
+::-webkit-scrollbar-thumb:hover {
+  opacity: 0.5;
+}
+
+/* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -37,5 +129,411 @@ body {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+/* ---- Motion + glow system ---- */
+@keyframes glowPulse {
+  0%,
+  100% {
+    opacity: 0.65;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes floatSlow {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes roboFloat {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-12px) scale(1.008);
+  }
+}
+
+/* Independent slow drift for orbit cards: float + slight rotation */
+@keyframes orbitDrift {
+  0%,
+  100% {
+    transform: translate(0, 0) rotate(-1.4deg);
+  }
+  50% {
+    transform: translate(7px, -13px) rotate(1.4deg);
+  }
+}
+
+/* Flowing dashes on the orbit connector lines */
+@keyframes orbitDash {
+  to {
+    stroke-dashoffset: -18;
+  }
+}
+
+.animate-glow-pulse {
+  animation: glowPulse 3.5s ease-in-out infinite;
+}
+
+.animate-float-slow {
+  animation: floatSlow 6s ease-in-out infinite;
+}
+
+.animate-robo-float {
+  animation: roboFloat 7s ease-in-out infinite;
+}
+
+.animate-orbit {
+  animation: orbitDrift var(--orbit-dur, 10s) ease-in-out infinite;
+  animation-delay: var(--orbit-delay, 0s);
+}
+
+.orbit-line {
+  animation: orbitDash 1.6s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-glow-pulse,
+  .animate-float-slow,
+  .animate-robo-float,
+  .animate-orbit {
+    animation: none;
+  }
+  .orbit-line {
+    animation: none;
+  }
+  .orbit-pulse {
+    display: none;
+  }
+}
+
+/* Gradient text */
+.gradient-text {
+  background: linear-gradient(135deg, var(--text-primary) 0%, var(--brand-primary) 50%, var(--brand-secondary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Glass morphism — theme aware */
+.glass {
+  background: rgba(18, 18, 26, 0.78);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-primary);
+  transition: background-color 0.45s ease, border-color 0.45s ease, box-shadow 0.45s ease;
+}
+
+.light .glass {
+  background: rgba(255, 255, 255, 0.88);
+  border: 1px solid var(--border-primary);
+  box-shadow: 0 8px 32px -12px rgba(15, 23, 42, 0.12);
+}
+
+/* ---- Warm-white glow cards ---- */
+.card-warm {
+  position: relative;
+  transition: border-color 0.45s ease, box-shadow 0.45s ease, background-color 0.45s ease, transform 0.3s ease;
+}
+
+.card-warm:hover {
+  border-color: rgba(255, 220, 170, 0.45) !important;
+  box-shadow: 0 0 28px var(--glow-warm), 0 0 72px var(--glow-warm-soft), 0 12px 40px -12px rgba(0, 0, 0, 0.35);
+}
+
+.light .card-warm:hover {
+  border-color: rgba(217, 119, 6, 0.35) !important;
+  box-shadow: 0 0 0 1px rgba(255, 237, 213, 0.8), 0 12px 40px -12px rgba(217, 119, 6, 0.25), 0 0 48px rgba(255, 237, 213, 0.6);
+}
+
+/* ---- Theme-relative headline + stat gradients ----
+   Light mode: deep vibrant amber/orange (readable on white)
+   Dark mode: soft warm-white glow gradient (readable on black) */
+.headline-accent {
+  background: linear-gradient(100deg, #b45309 0%, #ea580c 45%, #d97706 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+}
+
+.dark .headline-accent {
+  background: linear-gradient(100deg, #fcd34d 0%, #fff5e6 50%, #fde68a 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+}
+
+.stat-accent {
+  background: linear-gradient(100deg, #b45309, #ea580c);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+}
+
+.dark .stat-accent {
+  background: linear-gradient(100deg, #fcd34d, #fef3c7);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Robo video — NO box. The frame's hard edges are feathered away with a
+   radial mask so the robot floats on the page background in every theme.
+   Glow hugs the robo via drop-shadow filters. */
+.robo-video {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 0;
+  outline: 0;
+  border-radius: 24px;
+  background: transparent;
+  image-rendering: auto;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-mask-image: radial-gradient(ellipse 92% 92% at 50% 50%, #000 76%, transparent 98%);
+  mask-image: radial-gradient(ellipse 92% 92% at 50% 50%, #000 76%, transparent 98%);
+  transition: filter 0.45s ease;
+  /* Light mode: subtle daylight reflection under the robot */
+  filter: drop-shadow(0 30px 50px rgba(15, 23, 42, 0.22)) drop-shadow(0 0 46px rgba(255, 255, 255, 0.65));
+}
+
+.dark .robo-video {
+  /* Dark mode: warm-white halo hugging the robo shape */
+  filter: drop-shadow(0 0 32px rgba(255, 245, 230, 0.4)) drop-shadow(0 0 110px rgba(245, 158, 11, 0.25));
+}
+
+/* Radial spotlight cone beneath the robot (replaces any container) */
+.robo-spotlight {
+  background: radial-gradient(ellipse 50% 42% at 50% 55%, rgba(255, 245, 230, 0.22), transparent 75%);
+  filter: blur(28px);
+  transition: opacity 0.45s ease;
+}
+
+.light .robo-spotlight {
+  background: radial-gradient(ellipse 50% 42% at 50% 55%, rgba(255, 255, 255, 0.9), transparent 78%);
+}
+
+/* Soft floor shadow grounding the float */
+.robo-floor {
+  background: radial-gradient(ellipse 50% 50% at 50% 50%, rgba(0, 0, 0, 0.55), transparent 72%);
+  filter: blur(10px);
+}
+
+.light .robo-floor {
+  background: radial-gradient(ellipse 50% 50% at 50% 50%, rgba(15, 23, 42, 0.28), transparent 72%);
+}
+
+/* Visor bloom: warm eye-light over the head area (screen blend only adds
+   light, so it is safe on both themes). Position is the motion value. */
+.visor-bloom {
+  border-radius: 9999px;
+  background: radial-gradient(ellipse 50% 55% at 50% 50%, rgba(255, 250, 238, 0.95), rgba(252, 211, 77, 0.45) 55%, transparent 78%);
+  filter: blur(9px);
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
+/* Golden grid for the hero room */
+.hero-grid {
+  background-image: linear-gradient(to right, var(--border-primary) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--border-primary) 1px, transparent 1px);
+  opacity: 0.2;
+}
+
+.dark .hero-grid {
+  background-image: linear-gradient(to right, rgba(252, 211, 77, 0.09) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(252, 211, 77, 0.09) 1px, transparent 1px);
+  opacity: 1;
+}
+
+/* Orbit integration cards — glassmorphism, readable in both themes */
+.orbit-card {
+  background: rgba(255, 255, 255, 0.92);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 10px 28px -12px rgba(15, 23, 42, 0.22);
+  transition: border-color 0.45s ease, box-shadow 0.45s ease, background-color 0.45s ease, transform 0.3s ease;
+}
+
+.dark .orbit-card {
+  background: rgba(20, 20, 30, 0.85);
+  border: 1px solid rgba(255, 220, 170, 0.38);
+  box-shadow: 0 0 22px var(--glow-warm), 0 14px 34px -12px rgba(0, 0, 0, 0.55);
+}
+
+.orbit-card:hover,
+.orbit-card:focus-visible {
+  transform: translateY(-2px) scale(1.03);
+  border-color: #cbd5e1;
+  box-shadow: 0 14px 34px -12px rgba(15, 23, 42, 0.28);
+}
+
+.dark .orbit-card:hover,
+.dark .orbit-card:focus-visible {
+  border-color: rgba(255, 236, 200, 0.75);
+  box-shadow: 0 0 34px var(--glow-warm-strong), 0 0 80px var(--glow-warm-soft), 0 14px 34px -12px rgba(0, 0, 0, 0.5);
+}
+
+/* Footer links — warm glow + underline sweep on hover */
+.footer-link {
+  position: relative;
+  transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+
+.footer-link::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  height: 1px;
+  width: 100%;
+  transform: scaleX(0);
+  transform-origin: left;
+  background: currentColor;
+  transition: transform 0.3s ease;
+}
+
+.footer-link:hover::after {
+  transform: scaleX(1);
+}
+
+.dark .footer-link:hover {
+  text-shadow: 0 0 14px rgba(255, 245, 230, 0.8);
+}
+
+/* Warm halo behind robo — layered warm-white light */
+.robo-halo {
+  background:
+    radial-gradient(closest-side, rgba(255, 245, 230, 0.32), rgba(255, 245, 230, 0.1) 55%, transparent 75%),
+    radial-gradient(closest-side, rgba(245, 158, 11, 0.14), transparent 70%);
+  filter: blur(60px);
+}
+
+.light .robo-halo {
+  background:
+    radial-gradient(closest-side, rgba(255, 237, 213, 0.95), rgba(255, 237, 213, 0.45) 55%, transparent 78%),
+    radial-gradient(closest-side, rgba(217, 119, 6, 0.16), transparent 70%);
+  filter: blur(70px);
+}
+
+/* Amber accent text that stays readable in both themes */
+.accent-amber {
+  color: #fbbf24;
+}
+.light .accent-amber {
+  color: #b45309;
+}
+
+/* Night-mode cursor aura — warm lamplight trailing the pointer.
+   Screen blend only adds light, and it fades out with the theme. */
+.cursor-glow {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 520px;
+  height: 520px;
+  border-radius: 9999px;
+  pointer-events: none;
+  z-index: 40;
+  background:
+    radial-gradient(circle, rgba(255, 252, 244, 0.16) 0%, rgba(252, 211, 77, 0.11) 22%, rgba(245, 158, 11, 0.06) 42%, transparent 68%);
+  mix-blend-mode: screen;
+}
+
+/* Focus visible */
+:focus-visible {
+  outline: 2px solid var(--brand-primary);
+  outline-offset: 2px;
+}
+
+/* Shimmer for skeleton loading */
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.animate-shimmer {
+  background: linear-gradient(90deg, transparent, var(--text-muted), transparent);
+  background-size: 1000px 100%;
+  animation: shimmer 2s linear infinite;
+}
+
+/* ---- AI Command Center ---- */
+
+/* Animated energy flow along workflow connectors */
+.cc-flow-x,
+.cc-flow-y {
+  position: absolute;
+  overflow: hidden;
+}
+
+.cc-flow-x::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, var(--glow-warm-strong), transparent);
+  animation: ccFlowX 2.2s linear infinite;
+}
+
+.cc-flow-y::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent, var(--glow-warm-strong), transparent);
+  animation: ccFlowY 2.2s linear infinite;
+}
+
+@keyframes ccFlowX {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes ccFlowY {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(100%);
+  }
+}
+
+/* Hide scrollbars on swipeable card rows while keeping scroll */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cc-flow-x::after,
+  .cc-flow-y::after {
+    animation: none;
   }
 }
