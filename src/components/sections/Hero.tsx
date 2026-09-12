@@ -16,7 +16,6 @@ import {
   ArrowUpRight,
 } from 'lucide-react';
 import { LinkButton, DemoIcon } from '@/components/ui/Button';
-import { useCursorLook } from '@/hooks/useCursorLook';
 
 interface OrbitBadge {
   icon: typeof Slack;
@@ -25,10 +24,6 @@ interface OrbitBadge {
   tile: string;
   /** absolute position of the card on the stage */
   position: string;
-  /** where the robot looks when this card is hovered (cursor-space -0.5..0.5) */
-  look: [number, number];
-  /** anchor point (0-160 / 0-90 space) for the connector line */
-  anchor: [number, number];
   orbitDuration: string;
   orbitDelay: string;
 }
@@ -40,8 +35,6 @@ const badges: OrbitBadge[] = [
     category: 'Team Communication',
     tile: 'bg-[#E01E5A]/10 text-[#E01E5A] dark:text-[#ff7aa8]',
     position: 'top-[4%] -left-2 sm:-left-10',
-    look: [-0.35, -0.15],
-    anchor: [16, 12],
     orbitDuration: '9s',
     orbitDelay: '0s',
   },
@@ -51,8 +44,6 @@ const badges: OrbitBadge[] = [
     category: 'Code Repository',
     tile: 'bg-slate-500/10 text-text-primary',
     position: 'top-[1%] -right-2 sm:-right-10',
-    look: [0.35, -0.2],
-    anchor: [144, 10],
     orbitDuration: '11s',
     orbitDelay: '1.2s',
   },
@@ -62,8 +53,6 @@ const badges: OrbitBadge[] = [
     category: 'Meetings & Deadlines',
     tile: 'bg-[#1A73E8]/10 text-[#1A73E8] dark:text-[#8AB4F8]',
     position: 'top-[38%] -left-4 sm:-left-14',
-    look: [-0.4, 0.05],
-    anchor: [10, 36],
     orbitDuration: '10s',
     orbitDelay: '2.1s',
   },
@@ -73,8 +62,6 @@ const badges: OrbitBadge[] = [
     category: 'Project Management',
     tile: 'bg-[#2684FF]/10 text-[#2684FF] dark:text-[#7aafff]',
     position: 'bottom-[24%] -right-3 sm:-right-12',
-    look: [0.38, 0.18],
-    anchor: [150, 62],
     orbitDuration: '12s',
     orbitDelay: '0.6s',
   },
@@ -84,8 +71,6 @@ const badges: OrbitBadge[] = [
     category: 'Documentation',
     tile: 'bg-slate-500/10 text-text-primary',
     position: 'bottom-[1%] left-[6%]',
-    look: [-0.25, 0.3],
-    anchor: [32, 84],
     orbitDuration: '9.5s',
     orbitDelay: '1.7s',
   },
@@ -108,28 +93,8 @@ const highlights = [
 const ROBO_VIDEO = 'https://strvid.nyc3.cdn.digitaloceanspaces.com/motionsite/hero_robo_video.mp4';
 const ROBO_POSTER = 'https://strvid.nyc3.cdn.digitaloceanspaces.com/motionsite/hero_robo_poster.jpg';
 
-/** Connector curve from a card anchor toward the robot core (160x90 stage space). */
-function connectorPath(anchor: [number, number]) {
-  const [ax, ay] = anchor;
-  return `M ${ax} ${ay} Q 80 ${ay} 80 42`;
-}
-
 export function Hero() {
   const reduce = useReducedMotion();
-  const {
-    rotateX,
-    rotateY,
-    roboX,
-    roboY,
-    eyeX,
-    eyeY,
-    orbitX,
-    orbitY,
-    blinking,
-    eyeBright,
-    lookAt,
-    releaseLook,
-  } = useCursorLook({ disabled: reduce === true });
 
   const fadeUp = reduce
     ? {}
@@ -191,11 +156,7 @@ export function Hero() {
             ))}
           </div>
 
-          <div
-            className="mt-8 flex flex-wrap items-center gap-4"
-            onMouseEnter={() => lookAt(-0.45, 0.05)}
-            onMouseLeave={releaseLook}
-          >
+          <div className="mt-8 flex flex-wrap items-center gap-4">
             <LinkButton href="http://localhost:5173" size="lg" className="group relative overflow-hidden">
               <span className="relative z-10">Get Started</span>
               <span
@@ -239,12 +200,8 @@ export function Hero() {
               />
               <div className="robo-spotlight absolute left-1/2 top-[58%] -z-10 h-[300px] w-[440px] -translate-x-1/2" aria-hidden="true" />
 
-              {/* Motion robo — transparent, floating. Outer layer follows the
-                  cursor (look-at), inner layer keeps the idle breathing. */}
-              <motion.div
-                {...roboEntrance}
-                style={reduce ? undefined : { rotateX, rotateY, x: roboX, y: roboY, transformStyle: 'preserve-3d' }}
-              >
+              {/* Motion robo — transparent, floating with idle breathing. */}
+              <motion.div {...roboEntrance}>
                 <div className={reduce ? undefined : 'animate-robo-float'}>
                   <div className="relative">
                     <video
@@ -259,18 +216,6 @@ export function Hero() {
                       aria-label="AgentForge AI robot project management demonstration"
                       poster={ROBO_POSTER}
                     />
-                    {/* Visor bloom: warm eye-light that drifts with the cursor,
-                        brightens on hover and blinks while idle. Soft by design
-                        so it reads as head glow even as the video moves. */}
-                    {!reduce && (
-                      <motion.div
-                        className="visor-bloom absolute left-[33%] top-[24%] h-[15%] w-[34%]"
-                        style={{ x: eyeX, y: eyeY }}
-                        animate={{ opacity: blinking ? 0.12 : eyeBright ? 0.9 : 0.55 }}
-                        transition={{ duration: 0.18 }}
-                        aria-hidden="true"
-                      />
-                    )}
                   </div>
                 </div>
               </motion.div>
@@ -278,50 +223,11 @@ export function Hero() {
               {/* Floor shadow grounding the float */}
               <div className="robo-floor absolute -bottom-3 left-1/2 h-[30px] w-[58%] -translate-x-1/2" aria-hidden="true" />
 
-              {/* Orbit layer: connectors + floating integration cards (sm+) */}
+              {/* Orbit layer: floating integration cards (sm+) */}
               <motion.div
                 className="pointer-events-none absolute inset-0 z-10 hidden sm:block"
-                style={reduce ? undefined : { x: orbitX, y: orbitY }}
                 aria-label="Connected integrations"
               >
-                <svg
-                  className="absolute inset-0 h-full w-full"
-                  viewBox="0 0 160 90"
-                  preserveAspectRatio="none"
-                  aria-hidden="true"
-                >
-                  <defs>
-                    <linearGradient id="orbitGrad" x1="0" y1="0" x2="1" y2="0">
-                      <stop offset="0%" stopColor="#fcd34d" stopOpacity="0.9" />
-                      <stop offset="100%" stopColor="#fff5e6" stopOpacity="0.15" />
-                    </linearGradient>
-                  </defs>
-                  {badges.map((b) => (
-                    <path
-                      key={b.name}
-                      d={connectorPath(b.anchor)}
-                      fill="none"
-                      stroke="url(#orbitGrad)"
-                      strokeWidth="1.5"
-                      vectorEffect="non-scaling-stroke"
-                      strokeLinecap="round"
-                      strokeDasharray="4 5"
-                      className="orbit-line"
-                      opacity="0.55"
-                    />
-                  ))}
-                  {!reduce && (
-                    <>
-                      <circle r="2.2" fill="#fff5e6" className="orbit-pulse">
-                        <animateMotion dur="4.5s" repeatCount="indefinite" path={connectorPath(badges[0].anchor)} />
-                      </circle>
-                      <circle r="2.2" fill="#fcd34d" className="orbit-pulse">
-                        <animateMotion dur="6s" begin="-3s" repeatCount="indefinite" path={connectorPath(badges[3].anchor)} />
-                      </circle>
-                    </>
-                  )}
-                </svg>
-
                 {badges.map((b, i) => {
                   const Icon = b.icon;
                   return (
@@ -341,10 +247,6 @@ export function Hero() {
                           role="article"
                           aria-label={`${b.name} integration, ${b.category}, connected`}
                           tabIndex={0}
-                          onMouseEnter={() => lookAt(b.look[0], b.look[1])}
-                          onMouseLeave={releaseLook}
-                          onFocus={() => lookAt(b.look[0], b.look[1])}
-                          onBlur={releaseLook}
                           className="orbit-card pointer-events-auto w-[176px] rounded-2xl p-3 outline-none"
                         >
                           <div className="flex items-center gap-2.5">
