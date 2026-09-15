@@ -1,9 +1,10 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { TechStrip } from '@/components/sections/TechStrip';
 import { Footer } from '@/components/sections/Footer';
 import { Button } from '@/components/ui/Button';
 import { StartupTeams } from '@/components/sections/StartupTeams';
 import { Hero } from '@/components/sections/Hero';
+import { DemoVideo } from '@/components/sections/DemoVideo';
 import { CursorGlow } from '@/components/ui/CursorGlow';
 
 describe('TechStrip', () => {
@@ -84,6 +85,26 @@ describe('Hero orbit badges', () => {
       expect(el.className).not.toMatch(/robo-frame/);
       el = el.parentElement;
     }
+  });
+});
+
+describe('DemoVideo', () => {
+  it('renders the local demo video with controls', () => {
+    render(<DemoVideo />);
+    const video = screen.getByLabelText('AgentForge product demo video');
+    expect(video.tagName).toBe('VIDEO');
+    expect(video).toHaveAttribute('src', '/agent-forge-demo.mp4');
+    expect(video).toHaveAttribute('controls');
+    expect(video).toHaveAttribute('loop');
+  });
+
+  it('starts muted for autoplay and enables sound from the toggle', () => {
+    render(<DemoVideo />);
+    const video = screen.getByLabelText('AgentForge product demo video');
+    expect(video).toHaveProperty('muted', true);
+
+    fireEvent.click(screen.getByRole('button', { name: /sound off/i }));
+    expect(screen.getByRole('button', { name: /sound on/i })).toHaveAttribute('aria-pressed', 'true');
   });
 });
 
