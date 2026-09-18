@@ -86,7 +86,7 @@ export function Navigation() {
 
         <div className="hidden md:flex items-center gap-3">
           <ThemeToggleButton onToggle={toggleTheme} isDark={isDark} label={toggleLabel} />
-          <LinkButton href="http://localhost:5173" size="sm">
+          <LinkButton href="https://agentforge-main.vercel.app/" size="sm">
             Get Started
           </LinkButton>
         </div>
@@ -123,7 +123,7 @@ export function Navigation() {
             ))}
           </ul>
           <div className="mt-4 flex items-center justify-between gap-3">
-            <LinkButton href="http://localhost:5173" className="w-full" onClick={() => setOpen(false)}>
+            <LinkButton href="https://agentforge-main.vercel.app/" className="w-full" onClick={() => setOpen(false)}>
               Get Started
             </LinkButton>
             <ThemeToggleButton onToggle={toggleTheme} isDark={isDark} label={toggleLabel} />

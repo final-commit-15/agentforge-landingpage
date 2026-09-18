@@ -29,7 +29,7 @@ export function FinalCTA() {
           </h2>
           <p className="mt-4 text-lg text-text-muted">Get started now and put your weekly PM admin on autopilot.</p>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
-            <LinkButton href="http://localhost:5173" size="lg" className="group relative overflow-hidden">
+            <LinkButton href="https://agentforge-main.vercel.app/" size="lg" className="group relative overflow-hidden">
               <span className="relative z-10">Get Started</span>
               <span className="absolute inset-0 bg-gradient-to-r from-amber-500/20 to-amber-400/10 blur-xl opacity-0 transition-opacity duration-300 group-hover:opacity-100" aria-hidden="true" />
             </LinkButton>
